@@ -11,8 +11,8 @@ const util          = require("util");
 let Game = function Game(user, email, address, port)
 {
 
-    game.User = user;
-    game.Email = email;
+    this.User = user;
+    this.Email = email;
 
     this.sock = require("net").createConnection(port, address);
 
