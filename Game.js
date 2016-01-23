@@ -11,7 +11,7 @@ const util          = require("util");
 let Game = function Game(user, email, address, port)
 {
 
-    this.User = user;
+    this.User  = user;
     this.Email = email;
 
     this.sock = require("net").createConnection(port, address);
@@ -31,6 +31,9 @@ let Game = function Game(user, email, address, port)
 
         }, 2500)
     });
+
+    this.Corporations = {};
+    this.Players      = {};
 
 }
 
@@ -61,6 +64,83 @@ Game.prototype.NewCommand = function(rawcommand)
 
     Dispatchers[rawcommand.Type](command, this);
 
+}
+
+Game.prototype.GetCorporation = function(id)
+{
+    return this.Corporations[id];
+}
+
+Game.prototype.GetPlayer = function(id)
+{
+    return this.Players[id];
+}
+
+Game.prototype.UpdateCorporation = function(command)
+{
+    let corporation = this.GetCorporation(command.CorpID);
+
+    if (!corporation)
+    {
+        corporation = { ID: command.CorpID };
+        this.Corporations[command.CorpID] = corporation;
+    }
+
+    corporation.Name = command.CorpName;
+}
+
+Game.prototype.UpdatePlayer = function(command)
+{
+    let player = this.GetPlayer(command.ID);
+
+    if (!player)
+    {
+        player = { ID: command.ID };
+        this.Players[command.ID] = player;
+    }
+
+    player.Name = command.Name;
+    player.Access = command.Access;
+}
+
+Game.prototype.UpdatePlayerStatus = function(command)
+{
+    let player = this.GetPlayer(command.ID);
+
+    if (!player)
+    {
+        player = { ID: command.ID };
+        this.Players[command.ID] = player;
+    }
+
+    player.CorpID = command.CorpID;
+    player.Online = command.Online;
+    player.CorpRank = command.CorpRank;
+    player.Hardcore = command.Hardcore;
+}
+
+Game.prototype.UpdateCorpTech = function(command)
+{
+    this.GetCorporation(command.CorpID).Techs = command.Techs;
+}
+
+Game.prototype.UpdatePlayerLocation = function(command)
+{
+    let player = this.GetPlayer(command.ID);
+
+    player.Universe = command.Universe;
+    if (player.Universe >= 0)
+    {
+        player.X = command.X;
+        player.Y = command.Y;
+    }
+}
+
+Game.prototype.ChangeMoneyEvent = function(command)
+{
+    let player = this.GetPlayer(command.ID);
+
+    player.Money = command.Money;
 }
 
 module.exports = Game;
