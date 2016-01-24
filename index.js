@@ -10,6 +10,7 @@ const RequestResourceTransfer = require("./commands/RequestResourceTransfer.js")
 let game = new Game(process.argv[2], process.argv[3], "66.119.27.230", 31040);
 
 const readline = require('readline');
+let timeout = 0;
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -29,22 +30,24 @@ rl.on("line", (line) =>
         case "jump":
         {
 
-            switch(args[1].toLowerCase())
-            {
+            setTimeout(() => {
+                switch(args[1].toLowerCase())
+                {
 
-                case "up":
-                    game.Writer.Write(new RequestJump(3));
-                    break;
-                case "down":
-                    game.Writer.Write(new RequestJump(4));
-                    break;
-                case "earth":
-                    game.Writer.Write(new RequestJump(1));
-                    break;
-                default:
-                    console.log(`unknown jump type '${args[1]}'`);
-                    break;
-            }
+                    case "up":
+                        game.Writer.Write(new RequestJump(3));
+                        break;
+                    case "down":
+                        game.Writer.Write(new RequestJump(4));
+                        break;
+                    case "earth":
+                        game.Writer.Write(new RequestJump(1));
+                        break;
+                    default:
+                        console.log(`unknown jump type '${args[1]}'`);
+                        break;
+                }
+            }, timeout);
 
             break;
         }
@@ -52,7 +55,16 @@ rl.on("line", (line) =>
         case "transfer":
         {
 
-            game.Writer.Write(new RequestResourceTransfer(127,127,127,127,127, follower));
+            setTimeout(() => game.Writer.Write(new RequestResourceTransfer(127,127,127,127,127, follower)), timeout);
+
+            break;
+
+        }
+
+        case "timeout":
+        {
+
+            timeout = parseInt(args[1]);
 
             break;
 
@@ -67,7 +79,7 @@ rl.on("line", (line) =>
                     player = game.Players[k].ID;
 
             if (player)
-                game.Writer.Write(new SetFollow(player));
+                setTimeout(() => game.Writer.Write(new SetFollow(player)), timeout);
 
             else
                 console.log(`unknown player '${args[1]}'`)
@@ -112,7 +124,7 @@ game.on("AttackEvent", (command) => {
     if (command.AttackerID == follower && command.AttackType >= 0 && command.AttackType <= 3)
     {
         console.log(command.DefenderID);
-        game.Writer.Write(new SetAttack(command.DefenderID));
+        setTimeout(() => game.Writer.Write(new SetAttack(command.DefenderID)), timeout / 10);
     }
 })
 

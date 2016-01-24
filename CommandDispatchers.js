@@ -14,7 +14,9 @@ CreateDispatcher(CommandTypes.HANDSHAKE, (cmd, game) => {
 
     console.log("Sending login...");
 
-    game.Writer.Write(new RequestLogin(game.User, game.Email, cmd.IV));
+    let login = new RequestLogin(game.User, game.Email, cmd.IV);
+
+    game.Writer.Write(login);
 
     game.emit("Connected");
 
@@ -31,6 +33,7 @@ CreateDispatcher(CommandTypes.REQUEST_TRADE, (command, game) => game.emit("Incom
 
 CreateDispatcher(CommandTypes.SET_FOLLOW, (command, game) => game.emit("FollowerUpdated", command.ID));
 
+CreateDispatcher(CommandTypes.SHOW_POPUP, (command) => console.log(command));
 CreateDispatcher(CommandTypes.UPDATE_PLAYER, (command, game) => game.UpdatePlayer(command));
 CreateDispatcher(CommandTypes.UPDATE_CORP_TECH, (command, game) => game.UpdateCorpTech(command));
 CreateDispatcher(CommandTypes.ATTACK_EVENT, (command, game) => game.emit("AttackEvent", command));

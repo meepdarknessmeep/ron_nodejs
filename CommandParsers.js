@@ -11,6 +11,7 @@ CreateParser(CommandTypes.ALIVE, require("./commands/Alive.js"));
 CreateParser(CommandTypes.UPDATE_SECTOR, require("./commands/Alive.js"));
 CreateParser(CommandTypes.HANDSHAKE, require("./commands/Handshake.js"));
 CreateParser(CommandTypes.SET_FOLLOW, require("./commands/SetFollow.js"));
+CreateParser(CommandTypes.SHOW_POPUP, require("./commands/ShowPopup.js"));
 CreateParser(CommandTypes.ATTACK_EVENT, require("./commands/AttackEvent.js"));
 CreateParser(CommandTypes.CHAT_MESSAGE, require("./commands/ChatMessage.js"));
 CreateParser(CommandTypes.REQUEST_TRADE, require("./commands/RequestTrade.js"));
