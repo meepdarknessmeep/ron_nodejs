@@ -1,5 +1,6 @@
 "use strict";
 
+const EntityTypes   = require("./EntityTypes.js");
 const CommandReader = require("./CommandReader.js");
 const CommandWriter = require("./CommandWriter.js");
 const Parsers       = require("./CommandParsers.js");
@@ -8,9 +9,10 @@ const Alive         = require("./commands/Alive.js");
 const EventEmitter  = require("events");
 const util          = require("util");
 
-let Game = function Game(user, email, address, port)
+let Game = function Game(serial, user, email, address, port)
 {
 
+    this.Serial = serial;
     this.User  = user;
     this.Email = email;
 
@@ -141,6 +143,50 @@ Game.prototype.ChangeMoneyEvent = function(command)
     let player = this.GetPlayer(command.ID);
 
     player.Money = command.Money;
+}
+
+Game.prototype.UpdateShipResources = function(command)
+{
+
+    let player = this.GetPlayer(command.ID);
+
+    player.Resources = command.Resources;
+
+}
+
+Game.prototype.UpdateEntity = function(command)
+{
+
+    if (command.Valid)
+    {
+
+        switch(command.Type)
+        {
+
+            case EntityTypes.SHIP:
+            {
+
+                let player = this.GetPlayer(command.ID);
+
+                player.Resources = command.Resources;
+
+                break;
+
+            }
+
+            default: break;
+
+        }
+
+    }
+
+}
+
+Game.prototype.UpdatePlayerBank = function(command)
+{
+
+    this.Inventory = command.Inventory;
+
 }
 
 module.exports = Game;

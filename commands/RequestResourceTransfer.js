@@ -19,8 +19,8 @@ RequestResourceTransfer.prototype.CreateBuffer = function()
 
     let buf = new Buffer(9);
 
-    for (let i = 0; i < this.Resources.Length; i++)
-        buf.writeInt8(this.Resources.Length[i], i);
+    for (let i = 0; i < this.Resources.length; i++)
+        buf.writeInt8(this.Resources[i], i);
 
     buf.writeInt32BE(this.ID, 5);
 

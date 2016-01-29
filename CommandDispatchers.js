@@ -14,7 +14,7 @@ CreateDispatcher(CommandTypes.HANDSHAKE, (cmd, game) => {
 
     console.log("Sending login...");
 
-    let login = new RequestLogin(game.User, game.Email, cmd.IV);
+    let login = new RequestLogin(game.User, game.Email, game.Serial, cmd.IV);
 
     game.Writer.Write(login);
 
@@ -34,10 +34,19 @@ CreateDispatcher(CommandTypes.REQUEST_TRADE, (command, game) => game.emit("Incom
 CreateDispatcher(CommandTypes.SET_FOLLOW, (command, game) => game.emit("FollowerUpdated", command.ID));
 
 CreateDispatcher(CommandTypes.SHOW_POPUP, (command) => console.log(command));
+CreateDispatcher(CommandTypes.UPDATE_PLAYER_LOAD, (command, game) => game.ID = command.ID);
+CreateDispatcher(CommandTypes.UPDATE_ENTITY, (command, game) => game.UpdateEntity(command));
 CreateDispatcher(CommandTypes.UPDATE_PLAYER, (command, game) => game.UpdatePlayer(command));
 CreateDispatcher(CommandTypes.UPDATE_CORP_TECH, (command, game) => game.UpdateCorpTech(command));
 CreateDispatcher(CommandTypes.ATTACK_EVENT, (command, game) => game.emit("AttackEvent", command));
+CreateDispatcher(CommandTypes.UPDATE_PLAYER_BANK, (command, game) => game.UpdatePlayerBank(command));
 CreateDispatcher(CommandTypes.CHANGE_MONEY_EVENT, (command, game) => game.ChangeMoneyEvent(command));
 CreateDispatcher(CommandTypes.UPDATE_CORPORATION, (command, game) => game.UpdateCorporation(command));
 CreateDispatcher(CommandTypes.UPDATE_PLAYER_STATUS, (command, game) => game.UpdatePlayerStatus(command));
+CreateDispatcher(CommandTypes.UPDATE_SHIP_RESOURCES, (command, game) => game.UpdateShipResources(command));
 CreateDispatcher(CommandTypes.UPDATE_PLAYER_LOCATION, (command, game) => game.UpdatePlayerLocation(command));
+
+CreateDispatcher(CommandTypes.UPDATE_PLAYER_CREDITS, (command, game) => game.Credits = command.Credits);
+CreateDispatcher(CommandTypes.UPDATE_PLAYER_BUYABLES, (command, game) => game.Buyables = command.Buyables);
+
+CreateDispatcher(CommandTypes.EVENT_CORP_INVITE, (command, game) => game.emit("CorpInvite", command.CorpID));

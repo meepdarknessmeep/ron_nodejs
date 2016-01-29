@@ -1,0 +1,12 @@
+module.exports = {
+	SHIP: 1,
+	NPC: 2,
+	GARRISON: 3,
+	PLANET: 4,
+	STARPORT: 5,
+	CARGO_MONEY: 6,
+	CARGO_ITEM: 7,
+	CARGO_RESOURCE: 8,
+	ASTEROID: 9,
+	TECH: 10
+};

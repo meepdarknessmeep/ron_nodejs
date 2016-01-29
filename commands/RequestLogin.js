@@ -5,7 +5,7 @@ const crypto       = require("crypto");
 
 const key = new Buffer([2, 39, 117, -2, -2, 8, -67, 53, -9, -110, 88, 93, -42, 63, 24, -39]);
 
-let RequestLogin = function RequestLogin(user, email, iv)
+let RequestLogin = function RequestLogin(user, email, serial, iv)
 {
 
     this.Type = CommandTypes.REQUEST_LOGIN;
@@ -13,6 +13,7 @@ let RequestLogin = function RequestLogin(user, email, iv)
     this.IV = iv;
     this.User = user;
     this.Email = email;
+    this.Serial = serial;
 
 }
 
@@ -28,16 +29,14 @@ RequestLogin.prototype.Encrypt = function(text)
 
 RequestLogin.prototype.CreateBuffer = function()
 {
-
-	const serial = "0000-0000-0000-0001";
-	const info = "MICROSOFT WINDOWS 10 USER RONNODEJS";
+	const info = "VmWare, Inc. VmWare Virtual Platform x86 cwhuang android_x86";
 	const clientversion = "1.2.0-GP";
 
     let bundles = [];
 
     bundles[0] = this.Encrypt(this.Email);
-    bundles[1] = this.Encrypt("ron_node_js");
-    bundles[2] = this.Encrypt(serial);
+    bundles[1] = this.Encrypt(this.Serial);
+    bundles[2] = this.Encrypt("unknown");
     bundles[3] = this.Encrypt(info);
     bundles[4] = this.Encrypt(clientversion);
 
